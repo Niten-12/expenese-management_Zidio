@@ -11,7 +11,80 @@
 This system enables a seamless, multi-level approval process for expense claims inside an enterprise. Users can submit expenses, attach supporting files, and track approval status through intuitive dashboards.
 
 ---
+🧪 Key Features
+🔐 Secure login per role (JWT + Route Guard)
 
+📄 PDF upload with each submission
+
+🔍 Real-time review modal for row-level decisions
+
+📊 Charts for analytics (Pending, Approved, Rejected)
+
+💬 Confirmation dialog for actions
+
+🎨 Responsive dashboard with tooltips, badges, and status colors
+
+📜 Auto-generated Submission Numbers: SUBM-YYYYMMDD-XXX
+
+🛠️ Setup Instructions
+1. Clone the Repository
+bash
+Copy
+Edit
+git clone https://github.com/your-username/expense-management-system.git
+2. Run the Backend
+bash
+Copy
+Edit
+cd backend
+./mvnw spring-boot:run
+3. Run the Frontend
+bash
+Copy
+Edit
+cd frontend
+npm install
+ng serve --open
+4. Environment Config
+Update the following in .env or application.properties:
+
+properties
+Copy
+Edit
+spring.datasource.url=...
+jwt.secret=...
+supabase.url=...
+📸 Screenshots
+Add high-quality images or GIFs here showing:
+
+Dashboard per role
+
+Modal drill-down
+
+Submission workflow
+
+Approval badges
+
+Mobile responsiveness
+
+📈 Roadmap
+ Manager → Finance → Admin approval flow
+
+ File attachment and storage
+
+ Email notifications on status change
+
+ Export reports (CSV/PDF)
+
+📄 License
+This project is licensed under the MIT License.
+
+🤝 Acknowledgements
+ZIDIO ERP Design Team
+
+Angular & Spring Boot Documentation
+
+Supabase Community
 ## 🔧 Tech Stack
 
 ### 🔹 Frontend
