@@ -1,0 +1,26 @@
+### Admin Login - Get JWT token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Admin Secured API Test
+# Replace <token> with the token from above response
+GET http://localhost:8080/api/admin/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwNjA3OTEzLCJleHAiOjE3NTA2MTE1MTN9.92gy9zuAR00p23Ky_8RHuSU0OTUNLJk5cMc1unvGm_c
+
+
+
+### Admin creaate  user
+POST http://localhost:8080/api/admin/create-user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwNjA3OTEzLCJleHAiOjE3NTA2MTE1MTN9.92gy9zuAR00p23Ky_8RHuSU0OTUNLJk5cMc1unvGm_c
+
+{
+  "username": "manager3",
+  "password": "managerpass",
+  "role": "MANAGER"
+}

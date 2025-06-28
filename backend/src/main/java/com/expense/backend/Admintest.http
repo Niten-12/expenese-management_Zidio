@@ -1,0 +1,36 @@
+### 3️⃣ ADMIN LOGIN — get token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 1. 🔄 Fetch all submissions in REVIEW_ADMIN state
+GET http://localhost:8080/api/admin/pending-submissions
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwOTg2Njk3LCJleHAiOjE3NTA5OTAyOTd9.AXAjYny6GzRqvcOOXiJaz7NDAIaLIFzNABSl0s7kU_A
+
+###
+
+### 2. 📄 Fetch all rows for Submission ID = 1
+GET http://localhost:8080/api/admin/submission/9/rows
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwOTg2Njk3LCJleHAiOjE3NTA5OTAyOTd9.AXAjYny6GzRqvcOOXiJaz7NDAIaLIFzNABSl0s7kU_A
+
+###
+
+### 3. 🚦 Approve Row 1 (if not already approved)
+PATCH http://localhost:8080/api/admin/row/4/status?status=APPROVED
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwOTg2Njk3LCJleHAiOjE3NTA5OTAyOTd9.AXAjYny6GzRqvcOOXiJaz7NDAIaLIFzNABSl0s7kU_A
+
+###
+
+### 4. ❌ Reject Row 2 again at admin level (final rejection)
+PATCH http://localhost:8080/api/admin/row/5/status?status=REJECTED_ADMIN
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwOTg2Njk3LCJleHAiOjE3NTA5OTAyOTd9.AXAjYny6GzRqvcOOXiJaz7NDAIaLIFzNABSl0s7kU_A
+
+###
+
+### 5. ✅ Approve Row 3 (if not already approved)
+PATCH http://localhost:8080/api/admin/row/6/status?status=APPROVED
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwiaWF0IjoxNzUwOTg2Njk3LCJleHAiOjE3NTA5OTAyOTd9.AXAjYny6GzRqvcOOXiJaz7NDAIaLIFzNABSl0s7kU_A

@@ -1,0 +1,45 @@
+### 1️⃣ Login as employee and get JWT token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "financeUser",
+  "password": "finance123"
+}
+
+### 2️⃣ Submit expenses (copy JWT from above response)
+POST http://localhost:8080/api/employee/expenses?username=employee1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlVXNlciIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTA2ODcxNDQsImV4cCI6MTc1MDY5MDc0NH0.AbiDzwyVdbKZoPAy5pklfA-pWbJ3Ruwx6l4C0j9EoLQ
+
+{
+  "employeeId": "123456789012",
+  "name": "Niten Swain",
+  "department": "IT",
+  "expenses": [
+    {
+      "category": "Travel",
+      "amount": 5000
+    },
+    {
+      "category": "Food",
+      "amount": 1500
+    }
+  ]
+}
+
+### 3️⃣ Fetch expenses — no filters
+GET http://localhost:8080/api/employee/expenses?username=employee1&page=0&size=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llZTIiLCJyb2xlcyI6WyJST0xFX0VNUExPWUVFIl0sImlhdCI6MTc1MDU4Mjg4NywiZXhwIjoxNzUwNTg2NDg3fQ.KCwzdXJN8RQ5oiT2MYX6IQAO30KnOiAnBMBlZ4f-zNk
+
+### 4️⃣ Fetch expenses — filtered by category
+GET http://localhost:8080/api/employee/expenses?username=employee1&category=Travel&page=0&size=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llZTIiLCJyb2xlcyI6WyJST0xFX0VNUExPWUVFIl0sImlhdCI6MTc1MDU4Mjg4NywiZXhwIjoxNzUwNTg2NDg3fQ.KCwzdXJN8RQ5oiT2MYX6IQAO30KnOiAnBMBlZ4f-zNk
+
+### 5️⃣ Fetch expenses — filtered by status
+GET http://localhost:8080/api/employee/expenses?username=employee1&status=Pending&page=0&size=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llZTIiLCJyb2xlcyI6WyJST0xFX0VNUExPWUVFIl0sImlhdCI6MTc1MDU4Mjg4NywiZXhwIjoxNzUwNTg2NDg3fQ.KCwzdXJN8RQ5oiT2MYX6IQAO30KnOiAnBMBlZ4f-zNk
+
+### 6️⃣ Fetch expenses — filtered by category + status
+GET http://localhost:8080/api/employee/expenses?username=employee2&category=Travel,Food& status=Pending&page=0&size=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llZTIiLCJyb2xlcyI6WyJST0xFX0VNUExPWUVFIl0sImlhdCI6MTc1MDY4NDExNiwiZXhwIjoxNzUwNjg3NzE2fQ.djPgpjL4-2QJOSqXJ5_l9aDurqwnUYzg6RxY0OAMx_g

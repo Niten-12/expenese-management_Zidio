@@ -1,0 +1,65 @@
+### 1. Login as Manager
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "manager1",
+  "password": "123456"
+}
+
+
+### Submit NEW expense request (duplicate manager, new data)
+POST http://localhost:8080/api/manager/submit-expense
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTA5NzgwMzcsImV4cCI6MTc1MDk4MTYzN30.iv7EnoNJuHbcBSLA0TS9ZGuPDDWpPIKWqyDZlf5uA8s
+
+{
+  "managerId": 30,
+  "managerName": "manager1",
+  "department": "Operations",
+  "date": "2025-06-28",
+  "purpose": "STAFF_RELATED_EXPENSES",
+  "totalEmployees": 3,
+  "totalCost": 57000.00,
+  "fileName": "employee-june-expense.pdf",
+  "expenseRows": [
+    {
+      "employeeId": "E101",
+      "employeeName": "Aditi",
+      "category": "Salaries and wages",
+      "cost": 30000.00,
+      "description": "June salary",
+      "rowIndex": 1
+    },
+    {
+      "employeeId": "E102",
+      "employeeName": "Nikhil",
+      "category": "Bonuses",
+      "cost": 15000.00,
+      "description": "Q2 bonus",
+      "rowIndex": 2
+    },
+    {
+      "employeeId": "E103",
+      "employeeName": "Parul",
+      "category": "Hiring",
+      "cost": 12000.00,
+      "description": "New developer",
+      "rowIndex": 3
+    }
+  ]
+}
+
+
+### 2. (Optional) Fetch pending general expenses — not submission-based
+GET http://localhost:8080/api/manager/expenses/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTA5Njg1OTksImV4cCI6MTc1MDk3MjE5OX0.lM3lzeVGDYURt2mgBdgGJniquMTAaM5DfgGFry2AsOE
+
+### ✅ Get Submission History for Manager
+GET http://localhost:8080/api/manager/history/30
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTEwNDk3NDUsImV4cCI6MTc1MTA1MzM0NX0.vKfqNxEuhYJef_OuNhvdhsWwdmAH7v08u0RA4ZG2FPE
+Accept: application/json
+
+### ✅ Get Submission History for Manager
+GET http://localhost:8080/api/manager/rows/SUBM-20250627-005
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTEwNTcwODQsImV4cCI6MTc1MTA2MDY4NH0._e5IDpagdsfxYzm-CBHTQfQIX3YNJ_7aPO4Y9XGS-eI

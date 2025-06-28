@@ -1,0 +1,57 @@
+### 1️⃣ FINANCE LOGIN — get token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "finance1",
+  "password": "123456"
+}
+
+### 📌 Copy the accessToken from the response and paste below
+### Example:
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
+
+### 2️⃣ GET all submissions under FINANCE review
+GET http://localhost:8080/api/finance/pending-submissions
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlMSIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTExMDg4ODgsImV4cCI6MTc1MTExMjQ4OH0.sQJ0VoASUiYqM9PqCRm-nd6LJhltIe1uKA3CFXL0uqc
+Content-Type: application/json
+
+###
+
+### 3️⃣ GET rows under submission ID = 1 (replace as needed)
+GET http://localhost:8080/api/finance/submission/11/rows
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlMSIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTExMDg4ODgsImV4cCI6MTc1MTExMjQ4OH0.sQJ0VoASUiYqM9PqCRm-nd6LJhltIe1uKA3CFXL0uqc
+Content-Type: application/json
+
+###
+
+### 4️⃣ APPROVE row ID 1 (query param version)
+PATCH http://localhost:8080/api/finance/row/1/status?status=APPROVED
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlMSIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTExMDg4ODgsImV4cCI6MTc1MTExMjQ4OH0.sQJ0VoASUiYqM9PqCRm-nd6LJhltIe1uKA3CFXL0uqc
+
+###
+
+### 5️⃣ REJECT row ID 2
+PATCH http://localhost:8080/api/finance/row/2/status?status=REJECTED_FINANCE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlMSIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTExMDg4ODgsImV4cCI6MTc1MTExMjQ4OH0.sQJ0VoASUiYqM9PqCRm-nd6LJhltIe1uKA3CFXL0uqc
+
+###
+
+### 6️⃣ (Optional) Use DTO-based review API — full metadata
+PATCH http://localhost:8080/api/finance/review-row
+Authorization: BearereyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlMSIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTExMDg4ODgsImV4cCI6MTc1MTExMjQ4OH0.sQJ0VoASUiYqM9PqCRm-nd6LJhltIe1uKA3CFXL0uqc
+Content-Type: application/json
+
+{
+  "rowId": 3,
+  "status": "APPROVED",
+  "comment": "Approved with correct bill attached.",
+  "reviewerName": "finance1",
+  "reviewerRole": "FINANCE"
+}
+
+###
+
+### 7️⃣ (Optional) Confirm if submission promoted to REVIEW_ADMIN
+GET http://localhost:8080/api/finance/pending-submissions
+Authorization: BearereyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaW5hbmNlMSIsInJvbGVzIjpbIlJPTEVfRklOQU5DRSJdLCJpYXQiOjE3NTExMDg4ODgsImV4cCI6MTc1MTExMjQ4OH0.sQJ0VoASUiYqM9PqCRm-nd6LJhltIe1uKA3CFXL0uqc

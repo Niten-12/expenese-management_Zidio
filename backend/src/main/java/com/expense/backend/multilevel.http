@@ -1,0 +1,73 @@
+### 1️⃣ MANAGER LOGIN — get token
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "manager1",
+  "password": "123456"
+}
+
+> {% client.global.set("manager_token", response.body.token); %}
+
+### Submit manager expense (multipart)
+POST http://localhost:8080/api/manager/submission
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTA4NDk0MTAsImV4cCI6MTc1MDg1MzAxMH0.eNJ2BorK9iLhyKi9ZtCMmEp_4h1DiwOUVaAw5r7zZ30
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="submission"
+Content-Type: application/json
+
+{
+  "submissionNo": "SUBM-2025-001",
+  "managerId": 1,
+  "managerName": "Manager 1",
+  "department": "Finance",
+  "dateSubmitted": "2025-06-25",
+  "purpose": "Staff Related Expenses",
+  "totalCost": 60000,
+  "totalEmployees": 2,
+  "status": "Pending Finance"
+}
+--WebAppBoundary
+Content-Disposition: form-data; name="rows"
+Content-Type: application/json
+
+[
+  {
+    "employeeId": "E001",
+    "employeeName": "Alice",
+    "category": "Travel",
+    "cost": 30000,
+    "description": "Team offsite"
+  },
+  {
+    "employeeId": "E002",
+    "employeeName": "Bob",
+    "category": "Food",
+    "cost": 30000,
+    "description": "Client lunch"
+  }
+]
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="attachment.pdf"
+Content-Type: application/pdf
+
+< ./sample.pdf
+--WebAppBoundary--
+
+
+### 9️⃣ MANAGER get all submissions
+GET http://localhost:8080/api/manager/submission
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTA4NDI3MzgsImV4cCI6MTc1MDg0NjMzOH0.jMQg-VJHnTj4jhiBktW6GLLng6jv_n64CPxSG2D1lew
+
+
+### 10️⃣ MANAGER get specific submission with rows
+GET http://localhost:8080/api/manager/submission/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTA4NDI3MzgsImV4cCI6MTc1MDg0NjMzOH0.jMQg-VJHnTj4jhiBktW6GLLng6jv_n64CPxSG2D1lew
+
+
+### 11️⃣ MANAGER get rows for submission
+GET http://localhost:8080/api/manager/submission/1/rows
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyMSIsInJvbGVzIjpbIlJPTEVfTUFOQUdFUiJdLCJpYXQiOjE3NTA4NDI3MzgsImV4cCI6MTc1MDg0NjMzOH0.jMQg-VJHnTj4jhiBktW6GLLng6jv_n64CPxSG2D1lew
