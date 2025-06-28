@@ -1,0 +1,192 @@
+<!-- ✅ Finance-Dashboard.html -->
+
+<!-- 🌐 Navbar with User Info + Logout -->
+<nav
+  class="bg-white shadow-md rounded-xl px-6 py-4 mb-6 flex justify-between items-center"
+>
+  <div class="text-sm text-gray-600">
+    Welcome: <strong>{{ userInfo?.username }}</strong> (ID: {{ userInfo?.id }})
+  </div>
+  <button
+    (click)="logout()"
+    class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition duration-200 shadow"
+  >
+    Logout
+  </button>
+</nav>
+
+<!-- 📊 Metric Cards -->
+<div class="px-4 md:px-6 xl:px-10">
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+    <div
+      class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 hover:scale-[1.02] transition-transform duration-200 flex flex-col justify-center items-center"
+    >
+      <h3 class="text-sm text-gray-500">Pending Submissions</h3>
+      <p class="text-2xl font-bold text-blue-600">
+        {{ totalPendingSubmissions }}
+      </p>
+      <h3 class="text-sm text-gray-500 mt-2">Pending Rows</h3>
+      <p class="text-2xl font-bold text-orange-600">{{ totalPendingRows }}</p>
+    </div>
+
+    <div
+      class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 col-span-1 xl:col-span-2 hover:scale-[1.02] transition-transform duration-200"
+    >
+      <h3 class="text-sm text-gray-500 text-center">
+        Analytics Expense Trends Chart Overview
+      </h3>
+
+      <!-- Chart control buttons -->
+      <div class="flex justify-center mt-4 gap-4">
+        <button
+          class="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-50"
+          (click)="setViewMode('year')"
+        >
+          Year
+        </button>
+        <button
+          class="px-4 py-1 border border-indigo-500 text-indigo-600 rounded hover:bg-indigo-50"
+          (click)="setViewMode('month')"
+        >
+          Month
+        </button>
+      </div>
+
+      <!-- Chart container -->
+      <div class="w-full h-80 mt-4">
+        <canvas
+          baseChart
+          [data]="{ labels: chartLabels, datasets: chartData }"
+          [options]="chartOptions"
+          [type]="chartType"
+          [legend]="true"
+        ></canvas>
+      </div>
+    </div>
+
+    <!-- 💰 Annual and Monthly Budget Card -->
+    <div
+      class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 text-center hover:scale-[1.02] transition-transform duration-200"
+    >
+      <h3 class="text-sm text-gray-500 mb-2">Budget Summary</h3>
+      <div class="flex justify-center gap-4 mb-4">
+        <p class="text-base text-gray-600">Year: {{ currentYear }}</p>
+        <p class="text-base text-gray-600">Month: {{ currentMonth }}</p>
+      </div>
+
+      <div class="mb-2">
+        <h4 class="text-sm text-gray-500">Annual Budget</h4>
+        <p class="text-xl font-bold text-green-600">₹{{ annualBudget }}</p>
+        <p class="text-sm text-gray-500">Spent: ₹{{ annualSpent }}</p>
+      </div>
+
+      <div>
+        <h4 class="text-sm text-gray-500">This Month Budget</h4>
+        <p class="text-xl font-bold text-indigo-600">₹{{ monthlyBudget }}</p>
+        <p class="text-sm text-gray-500">Spent: ₹{{ monthlySpent }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 📄 Pending Submissions Table -->
+<div class="px-4 md:px-6 xl:px-10">
+  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">
+      Pending Submissions
+    </h2>
+    <ng-container *ngIf="submissions$ | async as submissions">
+      <table
+        mat-table
+        [dataSource]="submissions"
+        class="mat-elevation-z8 w-full text-sm"
+      >
+        <ng-container matColumnDef="submissionNo">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left font-semibold text-gray-600"
+          >
+            Submission No
+          </th>
+          <td mat-cell *matCellDef="let sub">{{ sub.submissionNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="managerName">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left font-semibold text-gray-600"
+          >
+            Manager
+          </th>
+          <td mat-cell *matCellDef="let sub">{{ sub.managerName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left font-semibold text-gray-600"
+          >
+            Department
+          </th>
+          <td mat-cell *matCellDef="let sub">{{ sub.department }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalCost">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left font-semibold text-gray-600"
+          >
+            Total Cost
+          </th>
+          <td mat-cell *matCellDef="let sub">
+            ₹{{ sub.totalCost | number : "1.2-2" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left font-semibold text-gray-600"
+          >
+            Status
+          </th>
+          <td mat-cell *matCellDef="let sub">{{ sub.status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="text-left font-semibold text-gray-600"
+          >
+            Action
+          </th>
+          <td mat-cell *matCellDef="let sub">
+            <button
+              class="px-4 py-1 rounded-lg border border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 hover:shadow transition duration-150"
+              (click)="viewRows(sub.id)"
+            >
+              Review
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </ng-container>
+  </div>
+
+  <!-- 📜 Submission History Card -->
+  <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 mt-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Submission History</h2>
+    <p class="text-sm text-gray-600">
+      This section will display past submission data or logs once implemented.
+    </p>
+  </div>
+</div>

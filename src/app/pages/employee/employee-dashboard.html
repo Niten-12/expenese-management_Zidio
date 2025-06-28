@@ -1,0 +1,309 @@
+<div class="min-h-screen bg-gray-100 p-6">
+  <!-- NAVBAR -->
+  <div
+    class="flex justify-between items-center bg-white rounded-xl shadow p-4 mb-6"
+  >
+    <div class="text-sm text-gray-500">
+      Welcome: {{ userInfo?.username }} (ID: {{ userInfo?.id }})
+    </div>
+
+    <button
+      (click)="logout()"
+      class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow transition"
+    >
+      Logout
+    </button>
+  </div>
+
+  <!-- CARDS ROW -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div
+      class="bg-white rounded-xl shadow p-6 min-h-[350px] flex items-center justify-center text-center hover:shadow-2xl hover:scale-101 transition-transform duration-300 cursor-pointer"
+    >
+      <!-- Expense Trends Chart -->
+      <div class="bg-gray-50 p-4 rounded shadow-inner w-[1000px]">
+        <h3 class="font-medium text-gray-600 mb-2">
+          Expense Trends (Monthly / Yearly)
+        </h3>
+        <div class="relative w-full h-[300px]">
+          <canvas
+            #expenseChart
+            class="absolute top-0 left-0 w-full h-full"
+          ></canvas>
+        </div>
+
+        <p class="text-sm text-gray-500 mt-2"></p>
+      </div>
+    </div>
+    <div
+      class="bg-white rounded-xl shadow p-6 min-h-[350px] flex flex-col justify-start gap-4 hover:shadow-2xl hover:scale-101 transition-transform duration-300 cursor-pointer"
+    >
+      <!-- Row 1: Approved, Rejected, Pending Counts -->
+      <div class="flex justify-around text-center mb-4">
+        <div>
+          <p class="text-green-600 font-bold text-xl">12</p>
+          <span class="text-gray-500 text-sm">Approved</span>
+        </div>
+        <div>
+          <p class="text-red-600 font-bold text-xl">3</p>
+          <span class="text-gray-500 text-sm">Rejected</span>
+        </div>
+        <div>
+          <p class="text-yellow-600 font-bold text-xl">5</p>
+          <span class="text-gray-500 text-sm">Pending</span>
+        </div>
+      </div>
+
+      <!-- Row 2: Notification / Notice -->
+      <div class="bg-gray-100 p-3 rounded text-gray-700 text-sm shadow-inner">
+        <p class="font-medium">📢 Notice:</p>
+        <p>You have 2 new expense reports awaiting review.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPENSE FORM -->
+  <div class="bg-white rounded-2xl p-6 max-w-5xl mx-auto shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-700 mb-6">My Expenses</h2>
+
+    <form (ngSubmit)="submitForm()" #expenseForm="ngForm">
+      <!-- Employee Info -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Employee ID -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2"
+            >Employee ID</label
+          >
+          <input
+            type="text"
+            class="w-full rounded-lg bg-white h-10 px-4 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            placeholder="Enter your ID"
+            maxlength="12"
+            pattern="\\d{12}"
+            required
+            [(ngModel)]="form.employeeId"
+            name="employeeId"
+            #employeeId="ngModel"
+          />
+          <span
+            *ngIf="employeeId.invalid && employeeId.touched"
+            class="text-red-500 text-xs"
+          >
+            12 digit numeric Employee ID required.
+          </span>
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2"
+            >Name</label
+          >
+          <input
+            type="text"
+            class="w-full rounded-lg bg-white h-10 px-4 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            placeholder="Enter your name"
+            pattern="[A-Za-z ]+"
+            required
+            [(ngModel)]="form.name"
+            name="employeeName"
+            #employeeName="ngModel"
+          />
+          <span
+            *ngIf="employeeName.invalid && employeeName.touched"
+            class="text-red-500 text-xs"
+          >
+            Only letters allowed.
+          </span>
+        </div>
+
+        <!-- Department -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-2"
+            >Department</label
+          >
+          <select
+            class="w-full rounded-lg bg-white h-10 px-4 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            required
+            [(ngModel)]="form.department"
+            name="department"
+            #department="ngModel"
+          >
+            <option value="" disabled selected>Select your department</option>
+            <option value="HR">Human Resources</option>
+            <option value="Finance">Finance</option>
+            <option value="IT">IT</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+            <option value="Customer Support">Customer Support</option>
+            <option value="Product Management">Product Management</option>
+            <option value="Product Management">None</option>
+          </select>
+          <span
+            *ngIf="department.invalid && department.touched"
+            class="text-red-500 text-xs"
+          >
+            Department is required.
+          </span>
+        </div>
+      </div>
+
+      <!-- Expense Table -->
+      <div class="overflow-x-auto">
+        <table
+          class="min-w-full text-left text-sm border border-gray-200 rounded-lg shadow-sm"
+        >
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-3">Serial No.</th>
+              <th class="px-4 py-3">Category</th>
+              <th class="px-4 py-3">Amount ₹</th>
+              <th class="px-4 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let row of expenseRows; let i = index"
+              class="hover:bg-gray-50"
+            >
+              <td class="px-4 py-3">{{ row.serialNo }}</td>
+              <td class="px-4 py-3">
+                <select
+                  class="w-full rounded-md h-8 px-3 border border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  required
+                  [(ngModel)]="row.category"
+                  [name]="'category' + i"
+                  #category="ngModel"
+                >
+                  <option value="" disabled selected>Select Category</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Food">Food</option>
+                  <option value="Hospitality">Hospitality</option>
+                  <option value="Room Rent">Room Rent</option>
+                  <option value="Car Rent">Car Rent</option>
+                  <option value="Software & Subscriptions">
+                    Software & Subscriptions
+                  </option>
+                  <option value="Marketing & Advertising">
+                    Marketing & Advertising
+                  </option>
+                </select>
+                <span
+                  *ngIf="category.invalid && category.touched"
+                  class="text-red-500 text-xs"
+                >
+                  Category required.
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <input
+                  type="text"
+                  class="w-full rounded-md h-8 px-3 border border-gray-300 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  maxlength="14"
+                  pattern="\\d{1,14}"
+                  required
+                  [(ngModel)]="row.amount"
+                  [name]="'amount' + i"
+                  #amount="ngModel"
+                />
+                <span
+                  *ngIf="amount.invalid && amount.touched"
+                  class="text-red-500 text-xs"
+                >
+                  Amount required (1-14 digits).
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex space-x-2">
+                  <button
+                    type="button"
+                    (click)="addExpenseRow()"
+                    class="rounded-full bg-green-500 text-white w-8 h-8"
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    (click)="removeExpenseRow(i)"
+                    class="rounded-full bg-red-500 text-white w-8 h-8"
+                  >
+                    -
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex gap-4 mt-6">
+        <button
+          type="submit"
+          [disabled]="expenseForm.invalid"
+          class="bg-blue-600 text-white px-6 py-2 rounded-lg"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Expense History Table (same as before, no change needed for now) -->
+
+  <!-- EXPENSE HISTORY TABLE -->
+  <div class="bg-white rounded-2xl p-6 max-w-5xl mx-auto shadow-lg mt-8">
+    <h2 class="text-2xl font-bold text-gray-700 mb-4">Expense History</h2>
+
+    <div class="overflow-x-auto">
+      <table
+        class="min-w-full text-left text-sm border border-gray-200 rounded-lg shadow-sm"
+      >
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-gray-700 border-b">
+              Serial No.
+            </th>
+            <th class="px-4 py-3 font-semibold text-gray-700 border-b">Date</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 border-b">
+              Category
+            </th>
+            <th class="px-4 py-3 font-semibold text-gray-700 border-b">
+              Amount
+            </th>
+            <th class="px-4 py-3 font-semibold text-gray-700 border-b">
+              Status
+            </th>
+            <th class="px-4 py-3 font-semibold text-gray-700 border-b">
+              Department
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Example Row -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">1</td>
+            <td class="px-4 py-3">2025-06-20</td>
+            <td class="px-4 py-3">Travel</td>
+            <td class="px-4 py-3">₹5000</td>
+            <td class="px-4 py-3">
+              <span
+                class="inline-block px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"
+                >Approved</span
+              >
+            </td>
+            <td class="px-4 py-3 flex space-x-2">
+              <button
+                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow transition text-xs"
+              >
+                Admin
+              </button>
+            </td>
+          </tr>
+
+          <!-- Additional rows go here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

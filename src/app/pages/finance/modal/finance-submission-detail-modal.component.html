@@ -1,0 +1,140 @@
+<!-- src/app/pages/finance/modal/finance-submission-detail-modal.component.html -->
+
+<div
+  class="p-6 bg-white rounded-2xl shadow-2xl w-full max-w-5xl border border-gray-200"
+>
+  <div
+    class="flex justify-between items-center mb-6 border-b border-gray-200 pb-3"
+  >
+    <h2 class="text-2xl font-bold text-gray-800">Submission Details</h2>
+    <button
+      mat-icon-button
+      (click)="dialogRef.close()"
+      aria-label="Close"
+      class="text-gray-400 hover:text-gray-600 transition duration-200 text-xl"
+    >
+      ✕
+    </button>
+  </div>
+
+  <table
+    mat-table
+    [dataSource]="rows"
+    class="mat-elevation-z8 w-full rounded-xl overflow-hidden border border-gray-200"
+  >
+    <!-- Employee Name -->
+    <ng-container matColumnDef="employeeName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="bg-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700"
+      >
+        Employee
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        class="px-4 py-3 text-sm text-gray-800"
+      >
+        {{ row.employeeName }}
+      </td>
+    </ng-container>
+
+    <!-- Category -->
+    <ng-container matColumnDef="category">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="bg-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700"
+      >
+        Category
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        class="px-4 py-3 text-sm text-gray-800"
+      >
+        {{ row.category }}
+      </td>
+    </ng-container>
+
+    <!-- Cost -->
+    <ng-container matColumnDef="cost">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="bg-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700"
+      >
+        Cost
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        class="px-4 py-3 text-sm text-gray-800"
+      >
+        ₹{{ row.cost }}
+      </td>
+    </ng-container>
+
+    <!-- Status -->
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="bg-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700"
+      >
+        Status
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        class="px-4 py-3 text-sm text-gray-800"
+      >
+        {{ row.status }}
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="action">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="bg-gray-100 px-4 py-3 text-left text-sm font-medium text-gray-700"
+      >
+        Action
+      </th>
+      <td mat-cell *matCellDef="let row" class="px-4 py-3">
+        <div class="flex gap-2">
+          <button
+            mat-raised-button
+            color="primary"
+            class="text-white font-semibold px-4 py-1 rounded shadow-md hover:shadow-lg transition duration-150"
+            (click)="approve(row.id)"
+            [disabled]="processingRows.has(row.id)"
+          >
+            Approve
+          </button>
+          <button
+            mat-raised-button
+            color="warn"
+            class="text-white font-semibold px-4 py-1 rounded shadow-md hover:shadow-lg transition duration-150"
+            (click)="reject(row.id)"
+            [disabled]="processingRows.has(row.id)"
+          >
+            Reject
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+
+  <div
+    *ngIf="rows.length === 0"
+    class="text-center text-gray-500 py-6 text-base"
+  >
+    No expense rows available for this submission.
+  </div>
+</div>

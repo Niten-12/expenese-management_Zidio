@@ -1,0 +1,47 @@
+<div class="modal-container">
+  <h2 class="modal-title">📄 Submission Details: {{ submissionNo }}</h2>
+  <p class="modal-subtitle">📝 Purpose: {{ purpose }}</p>
+
+  <!-- Spinner while loading -->
+  <div *ngIf="loading" class="loading-spinner">
+    <p>Loading rows...</p>
+  </div>
+
+  <!-- Table content -->
+  <table *ngIf="!loading" class="expense-table">
+    <thead>
+      <tr>
+        <th *ngFor="let col of tableColumns">{{ col }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of expenseRows">
+        <td>{{ row.serialNo }}</td>
+
+        <!-- Conditionally rendered cells -->
+        <td *ngIf="tableColumns.includes('employeeId')">
+          {{ row.employeeId }}
+        </td>
+        <td *ngIf="tableColumns.includes('name')">{{ row.name }}</td>
+        <td *ngIf="tableColumns.includes('category')">{{ row.category }}</td>
+        <td *ngIf="tableColumns.includes('cost')">
+          {{ row.cost | currency : "INR" }}
+        </td>
+        <td *ngIf="tableColumns.includes('description')">
+          {{ row.description || "—" }}
+        </td>
+
+        <!-- Status with color-coded badge -->
+        <td>
+          <span [ngClass]="getStatusClass(row.status)">
+            {{ row.status.replace("_", " ") }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal-footer">
+    <button class="close-button" (click)="close()">Close</button>
+  </div>
+</div>

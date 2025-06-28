@@ -1,0 +1,542 @@
+<!-- expenxe-mangement-modal.component.html -->
+
+<!-- expenxe-mangement-modal.component.html -->
+<h2 class="text-xl font-semibold mb-5">Manager Expense Management</h2>
+
+<div class="p-4">
+  <form [formGroup]="expenseForm" class="space-y-4">
+    <div class="flex flex-wrap gap-4">
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Manager ID</label
+        >
+        <input
+          type="text"
+          formControlName="managerId"
+          [disabled]="true"
+          class="w-full border rounded-lg p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Manager Name</label
+        >
+        <input
+          type="text"
+          formControlName="managerName"
+          [disabled]="true"
+          class="w-full border rounded-lg p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Department</label
+        >
+        <select
+          formControlName="department"
+          class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option *ngFor="let dept of departmentOptions" [value]="dept">
+            {{ dept }}
+          </option>
+        </select>
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+        <input
+          type="date"
+          formControlName="date"
+          class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Expense Purpose</label
+        >
+        <select
+          formControlName="purpose"
+          class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option
+            *ngFor="let purpose of expensePurposeOptions"
+            [value]="purpose"
+          >
+            {{ purpose }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="dropdownCategoryOptions.length > 0">
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Category</label
+      >
+      <select
+        formControlName="category"
+        class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option *ngFor="let cat of dropdownCategoryOptions" [value]="cat">
+          {{ cat }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="showTable">
+      <table class="w-full border mt-4">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border p-2 text-left">S.No</th>
+
+            <ng-container *ngIf="tableType === 'staff'">
+              <th class="border p-2 text-left">Employee ID</th>
+              <th class="border p-2 text-left">Employee Name</th>
+              <th class="border p-2 text-left">Category</th>
+              <th class="border p-2 text-left">Cost</th>
+            </ng-container>
+
+            <ng-container
+              *ngIf="tableType === 'office' || tableType === 'utilities'"
+            >
+              <th class="border p-2 text-left">Category</th>
+              <th class="border p-2 text-left">Cost</th>
+              <!-- ✅ UPDATED: Amount → Cost -->
+            </ng-container>
+
+            <ng-container *ngIf="tableType === 'training'">
+              <th class="border p-2 text-left">Employee ID</th>
+              <th class="border p-2 text-left">Employee Name</th>
+              <th class="border p-2 text-left">Cost</th>
+              <th class="border p-2 text-left">Description</th>
+            </ng-container>
+
+            <th class="border p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let row of rows.controls; let i = index"
+            [formGroup]="row"
+          >
+            <td class="border p-2">{{ i + 1 }}</td>
+
+            <ng-container *ngIf="tableType === 'staff'">
+              <td class="border p-2">
+                <input
+                  formControlName="employeeId"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="employeeName"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <select
+                  formControlName="category"
+                  class="w-full border rounded p-1"
+                >
+                  <option *ngFor="let opt of rowCategoryOptions" [value]="opt">
+                    {{ opt }}
+                  </option>
+                </select>
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="cost"
+                  type="number"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container
+              *ngIf="tableType === 'office' || tableType === 'utilities'"
+            >
+              <td class="border p-2">
+                <select
+                  formControlName="category"
+                  class="w-full border rounded p-1"
+                >
+                  <option *ngFor="let opt of rowCategoryOptions" [value]="opt">
+                    {{ opt }}
+                  </option>
+                </select>
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="cost"
+                  type="number"
+                  class="w-full border rounded p-1"
+                />
+                <!-- ✅ UPDATED -->
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="tableType === 'training'">
+              <td class="border p-2">
+                <input
+                  formControlName="employeeId"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="employeeName"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="cost"
+                  type="number"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <textarea
+                  formControlName="description"
+                  class="w-full border rounded p-1"
+                  maxlength="1000"
+                ></textarea>
+              </td>
+            </ng-container>
+
+            <td class="border p-2 text-center">
+              <button
+                type="button"
+                (click)="addRow()"
+                class="bg-green-500 text-white rounded px-2"
+              >
+                +
+              </button>
+              <button
+                type="button"
+                (click)="removeRow(i)"
+                [disabled]="rows.length === 1"
+                class="bg-red-500 text-white rounded px-2"
+              >
+                −
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Total summary + file input -->
+      <div class="flex flex-wrap gap-4 mt-2 items-center">
+        <p class="text-sm text-gray-600">
+          Total Employees: {{ totalEmployees }}
+        </p>
+        <p class="text-sm text-gray-600">Total Cost (INR): ₹{{ totalCost }}</p>
+        <div class="relative inline-block">
+          <label
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow cursor-pointer hover:bg-blue-700 transition"
+          >
+            📄 Choose PDF
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="application/pdf"
+              class="hidden"
+            />
+          </label>
+          <span class="ml-2 text-sm text-gray-700" *ngIf="attachedFile">
+            {{ attachedFile.name }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="bg-gray-300 text-black rounded-lg px-4 py-2 hover:bg-gray-400"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="onSubmit()"
+        class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- <h2 class="text-xl font-semibold mb-5">Manager Expense Management</h2>
+
+<div class="p-4">
+  <form [formGroup]="expenseForm" class="space-y-4">
+    <div class="flex flex-wrap gap-4">
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Manager ID</label
+        >
+        <input
+          type="text"
+          formControlName="managerId"
+          [disabled]="true"
+          class="w-full border rounded-lg p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Manager Name</label
+        >
+        <input
+          type="text"
+          formControlName="managerName"
+          [disabled]="true"
+          class="w-full border rounded-lg p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Department</label
+        >
+        <select
+          formControlName="department"
+          class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option *ngFor="let dept of departmentOptions" [value]="dept">
+            {{ dept }}
+          </option>
+        </select>
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+        <input
+          type="date"
+          formControlName="date"
+          class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="flex-1 min-w-[150px]">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Expense Purpose</label
+        >
+        <select
+          formControlName="purpose"
+          class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option
+            *ngFor="let purpose of expensePurposeOptions"
+            [value]="purpose"
+          >
+            {{ purpose }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="dropdownCategoryOptions.length > 0">
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Category</label
+      >
+      <select
+        formControlName="category"
+        class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option *ngFor="let cat of dropdownCategoryOptions" [value]="cat">
+          {{ cat }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="showTable">
+      <table class="w-full border mt-4">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border p-2 text-left">S.No</th>
+
+            <ng-container *ngIf="tableType === 'staff'">
+              <th class="border p-2 text-left">Employee ID</th>
+              <th class="border p-2 text-left">Employee Name</th>
+              <th class="border p-2 text-left">Category</th>
+              <th class="border p-2 text-left">Cost</th>
+            </ng-container>
+
+            <ng-container
+              *ngIf="tableType === 'office' || tableType === 'utilities'"
+            >
+              <th class="border p-2 text-left">Category</th>
+              <th class="border p-2 text-left">Amount</th>
+            </ng-container>
+
+            <ng-container *ngIf="tableType === 'training'">
+              <th class="border p-2 text-left">Employee ID</th>
+              <th class="border p-2 text-left">Employee Name</th>
+              <th class="border p-2 text-left">Cost</th>
+              <th class="border p-2 text-left">Description</th>
+            </ng-container>
+
+            <th class="border p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let row of rows.controls; let i = index"
+            [formGroup]="row"
+          >
+            <td class="border p-2">{{ i + 1 }}</td>
+
+            <ng-container *ngIf="tableType === 'staff'">
+              <td class="border p-2">
+                <input
+                  formControlName="employeeId"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="employeeName"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <select
+                  formControlName="category"
+                  class="w-full border rounded p-1"
+                >
+                  <option *ngFor="let opt of rowCategoryOptions" [value]="opt">
+                    {{ opt }}
+                  </option>
+                </select>
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="cost"
+                  type="number"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container
+              *ngIf="tableType === 'office' || tableType === 'utilities'"
+            >
+              <td class="border p-2">
+                <select
+                  formControlName="category"
+                  class="w-full border rounded p-1"
+                >
+                  <option *ngFor="let opt of rowCategoryOptions" [value]="opt">
+                    {{ opt }}
+                  </option>
+                </select>
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="amount"
+                  type="number"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+            </ng-container>
+
+            <ng-container *ngIf="tableType === 'training'">
+              <td class="border p-2">
+                <input
+                  formControlName="employeeId"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="employeeName"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <input
+                  formControlName="cost"
+                  type="number"
+                  class="w-full border rounded p-1"
+                />
+              </td>
+              <td class="border p-2">
+                <textarea
+                  formControlName="description"
+                  class="w-full border rounded p-1"
+                  maxlength="1000"
+                ></textarea>
+              </td>
+            </ng-container>
+
+            <td class="border p-2 text-center">
+              <button
+                type="button"
+                (click)="addRow()"
+                class="bg-green-500 text-white rounded px-2"
+              >
+                +
+              </button>
+              <button
+                type="button"
+                (click)="removeRow(i)"
+                [disabled]="rows.length === 1"
+                class="bg-red-500 text-white rounded px-2"
+              >
+                −
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Total summary + file input in single row -->
+<!-- <div class="flex flex-wrap gap-4 mt-2 items-center">
+        <p class="text-sm text-gray-600">
+          Total Employees: {{ totalEmployees }}
+        </p>
+        <p class="text-sm text-gray-600">Total Cost (INR): ₹{{ totalCost }}</p>
+        <div class="relative inline-block">
+          <label
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow cursor-pointer hover:bg-blue-700 transition"
+          >
+            📄 Choose PDF
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="application/pdf"
+              class="hidden"
+            />
+          </label>
+          <span class="ml-2 text-sm text-gray-700" *ngIf="attachedFile">{{
+            attachedFile.name
+          }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="bg-gray-300 text-black rounded-lg px-4 py-2 hover:bg-gray-400"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="onSubmit()"
+        class="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div> -->
+-->

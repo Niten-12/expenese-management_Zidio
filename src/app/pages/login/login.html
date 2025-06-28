@@ -1,0 +1,68 @@
+<div class="min-h-screen flex flex-col md:flex-row bg-gray-900 text-white">
+  <!-- LEFT: Branding + Visuals -->
+  <div
+    class="md:w-1/2 relative hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-900 to-purple-800 p-10"
+  >
+    <div class="space-y-6">
+      <div class="text-center">
+        <h1 class="text-5xl font-extrabold animate-pulse">ZIDIO Development</h1>
+        <p class="mt-4 text-lg text-gray-300">Enterprise Expense Management</p>
+      </div>
+      <ul class="space-y-2 text-gray-300">
+        <li class="flex items-center">
+          <span class="mr-2">✅</span> Role-based Access Control
+        </li>
+        <li class="flex items-center">
+          <span class="mr-2">✅</span> AI-powered Analytics
+        </li>
+        <li class="flex items-center">
+          <span class="mr-2">✅</span> Secure, Fast, Scalable
+        </li>
+      </ul>
+      <div class="absolute bottom-4 left-10 text-xs text-gray-400">
+        © 2025 ZIDIO Development
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Login Form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
+    <div
+      class="bg-white bg-opacity-10 backdrop-blur-lg shadow-xl rounded-2xl p-8 w-full max-w-sm"
+    >
+      <h2 class="text-3xl font-bold mb-6 text-center text-gray-900">Welcome</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="mb-4">
+          <input
+            type="text"
+            formControlName="username"
+            class="w-full rounded-lg p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            type="password"
+            formControlName="password"
+            class="w-full rounded-lg p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <a href="#" class="text-sm text-purple-600 hover:underline">
+            Forgot Password?
+          </a>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition"
+        >
+          Login
+        </button>
+        <div *ngIf="errorMessage" class="text-red-500 mt-2 text-sm text-center">
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
