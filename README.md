@@ -1,6 +1,6 @@
 
 
-# 💼 Expense Management System (ZIDIO Internal ERP Module)
+# 💼 Expense Management System (ZIDIO Internal ERP Module)SpringBoot+Angular
 
 > A role-based full-stack web application to streamline expense submissions, approvals, and audit workflows across employees, managers, finance, and admins.
 
